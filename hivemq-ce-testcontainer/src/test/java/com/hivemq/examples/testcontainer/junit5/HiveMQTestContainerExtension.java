@@ -18,7 +18,7 @@ public class HiveMQTestContainerExtension implements BeforeEachCallback, AfterEa
 
     public HiveMQTestContainerExtension() {
         container = new GenericContainer(HIVEMQ_CE_IMAGE + ":" + HIVEMQ_CE_VERSION);
-        container.withExposedPorts(1883);
+        container.withExposedPorts(MQTT_PORT);
 
         final LogMessageWaitStrategy waitStrategy = new LogMessageWaitStrategy();
         waitStrategy.withRegEx(".*Started HiveMQ in.*");

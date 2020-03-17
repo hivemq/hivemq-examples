@@ -14,7 +14,6 @@ public class MqttClientTestWithContainerRule {
     @Test
     public void test_mqtt() {
         final Mqtt5BlockingClient client = Mqtt5Client.builder()
-                .serverHost("localhost")
                 .serverPort(rule.getMqttPort())
                 .buildBlocking();
 
