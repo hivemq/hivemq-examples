@@ -22,7 +22,8 @@ public class MathChallengeClient {
 
     public static void main(final @NotNull String[] args) {
         final Mqtt5Client client = Mqtt5Client.builder()
-                .serverAddress(new InetSocketAddress("localhost", 1883))
+                .serverHost("localhost")
+                .serverPort(1883)
                 .enhancedAuth(new MathChallengeEnhancedAuthMechanism())
                 .build();
 
