@@ -21,6 +21,7 @@ public class HiveMQTestContainerRule extends TestWatcher {
 
         final LogMessageWaitStrategy waitStrategy = new LogMessageWaitStrategy();
         waitStrategy.withRegEx(".*Started HiveMQ in.*");
+        container.waitingFor(waitStrategy);
     }
 
     @Override

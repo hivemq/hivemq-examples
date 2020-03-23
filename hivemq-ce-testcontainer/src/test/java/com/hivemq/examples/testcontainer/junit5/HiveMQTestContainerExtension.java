@@ -22,6 +22,7 @@ public class HiveMQTestContainerExtension implements BeforeEachCallback, AfterEa
 
         final LogMessageWaitStrategy waitStrategy = new LogMessageWaitStrategy();
         waitStrategy.withRegEx(".*Started HiveMQ in.*");
+        container.waitingFor(waitStrategy);
     }
 
     @Override
