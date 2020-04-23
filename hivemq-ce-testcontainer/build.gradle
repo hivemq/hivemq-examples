@@ -12,12 +12,9 @@ repositories {
 }
 
 dependencies {
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'org.jetbrains', name: 'annotations', version: '16.0.1'
     compile group: 'com.hivemq', name: 'hivemq-mqtt-client', version: '1.1.4'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
-    compile group: 'com.hivemq', name: 'hivemq-extension-sdk', version: '4.3.0'
-    compile group: 'org.jboss.shrinkwrap', name: 'shrinkwrap-api', version: '1.2.6'
-    compile group: 'org.javassist', name: 'javassist', version: '3.27.0-GA'
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.0'
     testCompile group: 'org.testcontainers', name: 'testcontainers', version: '1.13.0'
