@@ -1,4 +1,4 @@
-package com.smartaquarium.equipment;
+package com.hivemq.examples.smartaquarium.equipment;
 
 public interface TemperatureSensor {
 

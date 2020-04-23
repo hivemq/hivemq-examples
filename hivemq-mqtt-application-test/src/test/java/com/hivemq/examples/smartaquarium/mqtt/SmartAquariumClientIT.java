@@ -1,15 +1,15 @@
-package com.smartaquarium.mqtt;
+package com.hivemq.examples.smartaquarium.mqtt;
 
 import com.hivemq.client.mqtt.MqttGlobalPublishFilter;
 import com.hivemq.client.mqtt.datatypes.MqttQos;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3BlockingClient;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3Client;
 import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish;
+import com.hivemq.examples.smartaquarium.equipment.Co2;
+import com.hivemq.examples.smartaquarium.equipment.Light;
+import com.hivemq.examples.smartaquarium.equipment.Pump;
+import com.hivemq.examples.smartaquarium.equipment.TemperatureSensor;
 import com.hivemq.testcontainer.junit5.HiveMQTestContainerExtension;
-import com.smartaquarium.equipment.Co2;
-import com.smartaquarium.equipment.Light;
-import com.smartaquarium.equipment.Pump;
-import com.smartaquarium.equipment.TemperatureSensor;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,14 +82,16 @@ class SmartAquariumClientIT {
                 .qos(MqttQos.EXACTLY_ONCE)
                 .send();
 
+        final Mqtt3BlockingClient.Mqtt3Publishes publishes = testClient.publishes(MqttGlobalPublishFilter.ALL);
+
         when(temperatureSensor.getCelsius()).thenReturn(13.0f);
         smartAquariumClient.publishTemperature();
 
-        final Mqtt3Publish mqtt3Publish = testClient.publishes(MqttGlobalPublishFilter.ALL).receive();
+        final Mqtt3Publish mqtt3Publish = publishes.receive();
 
         assertNotNull(mqtt3Publish.getPayloadAsBytes());
         final String payload = new String(mqtt3Publish.getPayloadAsBytes(), StandardCharsets.UTF_8);
-        assertEquals("13,0°C", payload);
+        assertEquals("13.0°C", payload);
 
     }
 }

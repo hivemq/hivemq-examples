@@ -1,13 +1,14 @@
-package com.smartaquarium.mqtt;
+package com.hivemq.examples.smartaquarium.mqtt;
 
-import com.smartaquarium.equipment.Co2;
-import com.smartaquarium.equipment.Light;
-import com.smartaquarium.equipment.Pump;
-import com.smartaquarium.equipment.TemperatureSensor;
+import com.hivemq.examples.smartaquarium.equipment.Co2;
+import com.hivemq.examples.smartaquarium.equipment.Light;
+import com.hivemq.examples.smartaquarium.equipment.Pump;
+import com.hivemq.examples.smartaquarium.equipment.TemperatureSensor;
 import org.eclipse.paho.client.mqttv3.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 public class SmartAquariumClient implements MqttCallback {
 
@@ -46,7 +47,7 @@ public class SmartAquariumClient implements MqttCallback {
     }
 
     public void publishTemperature() throws MqttException {
-        final String temperatureString = String.format("%.1f°C", temperatureSensor.getCelsius());
+        final String temperatureString = String.format(Locale.US, "%.1f°C", temperatureSensor.getCelsius());
         final MqttMessage temperatureMessage = new MqttMessage(temperatureString.getBytes(StandardCharsets.UTF_8));
         client.publish(TEMPERATURE_TOPIC, temperatureMessage);
     }
