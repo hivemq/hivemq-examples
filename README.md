@@ -17,10 +17,10 @@ with JUnit 4 or JUnit 5.
 
 ## Getting started with HiveMQ Cloud
 To try out the cloud hosted version of HiveMQ, simply use the *hivemq-getting-started-cloud* module.
-Enter your host, username and password like it is described in the comments and on the website.
+Enter your host, username and password like it is described in the comments and on the [website](https://www.hivemq.com/blog/how-to-get-started-with-mqtt/).
 Then you can see, how an example-implementation would work.
 
-## Getting started with a public broker
+## Getting started with a public HiveMQ broker
 To try out the publicly hosted version of HiveMQ, simply use the *hivemq-getting-started-public* module.
 It will connect to `"broker.hivemq.com"`, which is the publicly available broker of HiveMQ.
 Run the program, and you can see how an example-implementation would work.

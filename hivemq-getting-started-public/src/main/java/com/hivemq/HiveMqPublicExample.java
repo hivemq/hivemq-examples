@@ -10,34 +10,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-public class CloudExample {
+public class HiveMqPublicExample {
 
     public static void main(String[] args) throws InterruptedException, UnknownHostException, SocketException {
-        final String host = "<your_host>"; // use your host-name, it should look like '<alphanumeric>.s2.eu.hivemq.cloud'
-        final String username = "<your_username>"; // your credentials
-        final String password = "<your_password>";
-
-        final InetAddress localHost = InetAddress.getLocalHost();
-        final NetworkInterface ni = NetworkInterface.getByInetAddress(localHost);
-        final byte[] hardwareAddress = ni.getHardwareAddress(); // use this to get your MAC address, use it as a unique identifier
+        InetAddress localHost = InetAddress.getLocalHost();
+        NetworkInterface ni = NetworkInterface.getByInetAddress(localHost);
+        byte[] hardwareAddress = ni.getHardwareAddress(); // use this to get your MAC address, use it as a unique identifier
 
         // 1. create the client
         final Mqtt5Client client = Mqtt5Client.builder()
                 .identifier("sensor-" + hardwareAddress) // use a unique identifier
-                .serverHost(host)
+                .serverHost("broker.hivemq.com") // use the public HiveMQ broker
                 .automaticReconnectWithDefaultConfig() // the client automatically reconnects
-                .serverPort(8883) // this is the port of your cluster, for mqtt it is the default port 8883
-                .sslWithDefaultConfig() // establish a secured connection to HiveMQ Cloud using TLS
                 .build();
-
 
         // 2. connect the client
         client.toBlocking().connectWith()
-                .simpleAuth() // using authentication, which is required for a secure connection
-                .username(username) // use the username and password you just created
-                .password(password.getBytes(StandardCharsets.UTF_8))
-                .applySimpleAuth()
-                .willPublish() // the last message, before the client disconnects
+                .willPublish()
                 .topic("home/will")
                 .payload("sensor gone".getBytes())
                 .applyWillPublish()
@@ -68,17 +57,21 @@ public class CloudExample {
 
             TimeUnit.MILLISECONDS.sleep(500);
         }
+
+
     }
 
     private static byte[] getBrightness() {
-        // simulate a brightness sensor with values between 1000lux and 10000lux
+    // simulate a brightness sensor with values between 1000lux and 10000lux
         final int brightness = ThreadLocalRandom.current().nextInt(1_000, 10_000);
         return (brightness + "lux").getBytes(StandardCharsets.UTF_8);
     }
 
     private static byte[] getTemperature() {
-        // simulate a temperature sensor with values between 20°C and 30°C
+    // simulate a temperature sensor with values between 20°C and 30°C
         final int temperature = ThreadLocalRandom.current().nextInt(20, 30);
         return (temperature + "°C").getBytes(StandardCharsets.UTF_8);
     }
+
+
 }
