@@ -1,0 +1,9 @@
+rootProject.name = 'hivemq-examples'
+include 'hivemq-getting-started-cloud'
+include 'hivemq-getting-started-public'
+include 'hivemq-ce-testcontainer'
+include 'hivemq-mqtt-application-test'
+include 'math-challenge-client'
+include 'math-challenge-extension'
+
+
