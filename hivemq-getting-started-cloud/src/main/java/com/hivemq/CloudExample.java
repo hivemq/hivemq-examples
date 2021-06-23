@@ -17,9 +17,9 @@ public class CloudExample {
         final String username = "<your_username>"; // your credentials
         final String password = "<your_password>";
 
-        InetAddress localHost = InetAddress.getLocalHost();
-        NetworkInterface ni = NetworkInterface.getByInetAddress(localHost);
-        byte[] hardwareAddress = ni.getHardwareAddress(); // use this to get your MAC address, use it as a unique identifier
+        final InetAddress localHost = InetAddress.getLocalHost();
+        final NetworkInterface ni = NetworkInterface.getByInetAddress(localHost);
+        final byte[] hardwareAddress = ni.getHardwareAddress(); // use this to get your MAC address, use it as a unique identifier
 
         // 1. create the client
         final Mqtt5Client client = Mqtt5Client.builder()
