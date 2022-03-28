@@ -9,24 +9,27 @@ import com.hivemq.examples.smartaquarium.equipment.Co2;
 import com.hivemq.examples.smartaquarium.equipment.Light;
 import com.hivemq.examples.smartaquarium.equipment.Pump;
 import com.hivemq.examples.smartaquarium.equipment.TemperatureSensor;
-import com.hivemq.testcontainer.junit5.HiveMQTestContainerExtension;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
-import org.junit.jupiter.api.extension.RegisterExtension;
+import org.testcontainers.hivemq.HiveMQContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+@Testcontainers
 class SmartAquariumClientIT {
 
-    @RegisterExtension
-    @NotNull HiveMQTestContainerExtension container = new HiveMQTestContainerExtension();
+    @Container
+    @NotNull HiveMQContainer container = new HiveMQContainer(DockerImageName.parse("hivemq/hivemq-ce:latest"));
 
     private @NotNull Mqtt3BlockingClient testClient;
 
@@ -39,7 +42,7 @@ class SmartAquariumClientIT {
 
     @Test
     @Timeout(value = 2, unit = TimeUnit.MINUTES)
-    void test_lightTurnedOn() throws MqttException {
+    void test_lightTurnedOn() {
 
         final Light light = mock(Light.class);
         final Co2 co2 = mock(Co2.class);
@@ -47,7 +50,8 @@ class SmartAquariumClientIT {
         final TemperatureSensor temperatureSensor = mock(TemperatureSensor.class);
 
         final SmartAquariumClient smartAquariumClient = new SmartAquariumClient(
-                "tcp://localhost:" + container.getMqttPort(),
+                container.getHost(),
+                container.getMqttPort(),
                 light,
                 co2,
                 pump,
@@ -63,7 +67,7 @@ class SmartAquariumClientIT {
 
     @Test
     @Timeout(value = 2, unit = TimeUnit.MINUTES)
-    void test_publishTemperatureBlocking() throws MqttException, InterruptedException {
+    void test_publishTemperatureBlocking() throws Exception {
 
         final Light light = mock(Light.class);
         final Co2 co2 = mock(Co2.class);
@@ -71,7 +75,8 @@ class SmartAquariumClientIT {
         final TemperatureSensor temperatureSensor = mock(TemperatureSensor.class);
 
         final SmartAquariumClient smartAquariumClient = new SmartAquariumClient(
-                "tcp://localhost:" + container.getMqttPort(),
+                container.getHost(),
+                container.getMqttPort(),
                 light,
                 co2,
                 pump,
