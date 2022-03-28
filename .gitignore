@@ -2,3 +2,5 @@
 /hivemq-examples.iml
 /math-challenge-extension/math-challenge-extension.iml
 /math-challenge-client/math-challenge-client.iml
+.gradle
+/build/
