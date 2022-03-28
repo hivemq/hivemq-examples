@@ -10,11 +10,6 @@ and the [HiveMQ MQTT Client](https://github.com/hivemq/hivemq-mqtt-client).
 ## How to test MQTT Applications
 * An example how to test a full MQTT implementation using the [official HiveMQ Testcontainer](https://github.com/hivemq/hivemq-testcontainer).
 
-## HiveMQ Testcontainer
-* hivemq-ce-testcontainer: An example how to setup HiveMQ 
-[Testcontainers](https://github.com/testcontainers/testcontainers-java) for testing MQTT client applications 
-with JUnit 4 or JUnit 5.
-
 ## Getting started with HiveMQ Cloud
 To try out the cloud hosted version of HiveMQ, simply use the *hivemq-getting-started-cloud* module.
 Enter your host, username and password like it is described in the comments and on the [website](https://www.hivemq.com/blog/how-to-get-started-with-mqtt/).
