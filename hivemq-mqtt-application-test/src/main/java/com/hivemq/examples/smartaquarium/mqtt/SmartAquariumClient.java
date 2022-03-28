@@ -1,16 +1,19 @@
 package com.hivemq.examples.smartaquarium.mqtt;
 
+import com.hivemq.client.mqtt.MqttGlobalPublishFilter;
+import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
+import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
+import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
 import com.hivemq.examples.smartaquarium.equipment.Co2;
 import com.hivemq.examples.smartaquarium.equipment.Light;
 import com.hivemq.examples.smartaquarium.equipment.Pump;
 import com.hivemq.examples.smartaquarium.equipment.TemperatureSensor;
-import org.eclipse.paho.client.mqttv3.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
-public class SmartAquariumClient implements MqttCallback {
+public class SmartAquariumClient {
 
     public static final @NotNull String LIGHT_TOPIC = "/equipment/light";
     public static final @NotNull String CO2_TOPIC = "/equipment/co2";
@@ -21,41 +24,35 @@ public class SmartAquariumClient implements MqttCallback {
     private final @NotNull Co2 co2;
     private final @NotNull Pump pump;
 
-    private final @NotNull MqttClient client;
+    private final @NotNull Mqtt5BlockingClient client;
     private final @NotNull TemperatureSensor temperatureSensor;
 
     public SmartAquariumClient(
-            final @NotNull String brokerUri,
+            final @NotNull String brokerHost,
+            final int brokerPort,
             final @NotNull Light light,
             final @NotNull Co2 co2,
             final @NotNull Pump pump,
-            final @NotNull TemperatureSensor temperatureSensor) throws MqttException {
+            final @NotNull TemperatureSensor temperatureSensor) {
 
         this.light = light;
         this.co2 = co2;
         this.pump = pump;
         this.temperatureSensor = temperatureSensor;
 
-        client = new MqttClient(brokerUri, "smartaquarium");
+        client = Mqtt5Client.builder().serverHost(brokerHost).serverPort(brokerPort).buildBlocking();
         client.connect();
 
-        client.setCallback(this);
+        client.toAsync().publishes(MqttGlobalPublishFilter.ALL, this::accept);
 
-        client.subscribe(LIGHT_TOPIC, 2);
-        client.subscribe(CO2_TOPIC, 2);
-        client.subscribe(PUMP_TOPIC, 2);
+        client.subscribeWith().topicFilter(LIGHT_TOPIC).send();
+        client.subscribeWith().topicFilter(CO2_TOPIC).send();
+        client.subscribeWith().topicFilter(PUMP_TOPIC).send();
     }
 
-    public void publishTemperature() throws MqttException {
-        final String temperatureString = String.format(Locale.US, "%.1f°C", temperatureSensor.getCelsius());
-        final MqttMessage temperatureMessage = new MqttMessage(temperatureString.getBytes(StandardCharsets.UTF_8));
-        client.publish(TEMPERATURE_TOPIC, temperatureMessage);
-    }
-
-    @Override
-    public void messageArrived(final @NotNull String topic, final @NotNull MqttMessage mqttMessage) {
-        final String payload = new String(mqttMessage.getPayload(), StandardCharsets.UTF_8);
-        switch (topic) {
+    private void accept(final @NotNull Mqtt5Publish publish) {
+        final String payload = new String(publish.getPayloadAsBytes(), StandardCharsets.UTF_8);
+        switch (publish.getTopic().toString()) {
             case LIGHT_TOPIC:
                 if ("ON".equals(payload)) {
                     light.turnOn();
@@ -80,14 +77,9 @@ public class SmartAquariumClient implements MqttCallback {
         }
     }
 
-    @Override
-    public void connectionLost(final @NotNull Throwable throwable) {
-
-    }
-
-    @Override
-    public void deliveryComplete(final @NotNull IMqttDeliveryToken iMqttDeliveryToken) {
-
+    public void publishTemperature() {
+        final String temperatureString = String.format(Locale.US, "%.1f°C", temperatureSensor.getCelsius());
+        client.publishWith().topic(TEMPERATURE_TOPIC).payload(temperatureString.getBytes(StandardCharsets.UTF_8)).send();
     }
 
 }
