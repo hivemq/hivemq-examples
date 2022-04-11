@@ -15,10 +15,10 @@ import java.util.Locale;
 
 public class SmartAquariumClient {
 
-    public static final @NotNull String LIGHT_TOPIC = "/equipment/light";
-    public static final @NotNull String CO2_TOPIC = "/equipment/co2";
-    public static final @NotNull String PUMP_TOPIC = "/equipment/pump";
-    public static final @NotNull String TEMPERATURE_TOPIC = "/status/temperature";
+    public static final @NotNull String LIGHT_TOPIC = "equipment/light";
+    public static final @NotNull String CO2_TOPIC = "equipment/co2";
+    public static final @NotNull String PUMP_TOPIC = "equipment/pump";
+    public static final @NotNull String TEMPERATURE_TOPIC = "status/temperature";
 
     private final @NotNull Light light;
     private final @NotNull Co2 co2;
