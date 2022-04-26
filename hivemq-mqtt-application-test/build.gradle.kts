@@ -16,7 +16,6 @@ dependencies {
 
     testImplementation("org.testcontainers:junit-jupiter:1.17.0")
     testImplementation("org.testcontainers:hivemq:1.17.0")
-    testImplementation("org.testcontainers:testcontainers:1.17.0")
 
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
