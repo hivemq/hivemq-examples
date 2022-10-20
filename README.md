@@ -11,8 +11,9 @@ and the [HiveMQ MQTT Client](https://github.com/hivemq/hivemq-mqtt-client).
 * An example how to test a full MQTT implementation using the [official HiveMQ Testcontainer](https://github.com/hivemq/hivemq-testcontainer).
 
 ## Getting started with HiveMQ Cloud
-To try out the cloud hosted version of HiveMQ, simply use the *hivemq-getting-started-cloud* module.
-Enter your host, username and password like it is described in the comments and on the [website](https://www.hivemq.com/blog/how-to-get-started-with-mqtt/).
+[Sign up for your free HiveMQ Cloud account](https://console.hivemq.cloud/?utm_source=github&utm_medium=repositories&utm_campaign=hivemq-examples) to try out the cloud hosted version of HiveMQ. 
+You will get a free HiveMQ Cloud broker instance that you can use in combination with the *hivemq-getting-started-cloud* module of this example.
+Enter your host, username and password like it is described in the comments or on the [website](https://www.hivemq.com/blog/how-to-get-started-with-mqtt/).
 Then you can see, how an example-implementation would work.
 
 ## Getting started with a public HiveMQ broker
