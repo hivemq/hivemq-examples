@@ -18,6 +18,7 @@ public class MqttApplication {
 
     public MqttApplication(final @NotNull String serverHost, final int serverPort) {
         mqttClient = Mqtt5Client.builder()
+                .identifier("mqtt-application")
                 .serverHost(serverHost)
                 .serverPort(serverPort)
                 .automaticReconnect()
