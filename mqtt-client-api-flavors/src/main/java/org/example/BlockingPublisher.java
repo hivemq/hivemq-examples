@@ -19,18 +19,33 @@ public class BlockingPublisher {
                 .serverPort(1883)
                 .buildBlocking();
 
-        blockingClient.connect();
+        try {
+            blockingClient.connect();
+        } catch (final Exception e) {
+            System.out.println("Error while connecting!");
+            throw e;
+        }
         System.out.println("Successfully connected!");
 
         for (int i = 0; i < 10; i++) {
-            final Mqtt5Publish publish = Mqtt5Publish.builder()
-                    .topic("example/topic/blocking")
-                    .payload(("example #" + i).getBytes(UTF_8))
-                    .build();
-            blockingClient.publish(publish);
+            try {
+                final Mqtt5Publish publish = Mqtt5Publish.builder()
+                        .topic("example/topic/blocking")
+                        .payload(("example #" + i).getBytes(UTF_8))
+                        .build();
+                blockingClient.publish(publish);
+            } catch (final Exception e) {
+                System.out.println("Error while publishing!");
+                throw e;
+            }
         }
         System.out.println("Successfully published!");
-        blockingClient.disconnect();
+        try {
+            blockingClient.disconnect();
+        } catch (final Exception e) {
+            System.out.println("Error while disconnecting!");
+            throw e;
+        }
         System.out.println("Successfully disconnected!");
     }
 }

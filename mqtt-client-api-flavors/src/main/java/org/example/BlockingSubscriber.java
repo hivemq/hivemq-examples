@@ -22,9 +22,20 @@ public class BlockingSubscriber {
                 .buildBlocking();
 
         try (final Mqtt5Publishes publishes = blockingClient.publishes(MqttGlobalPublishFilter.ALL)) {
-            blockingClient.connect();
+            try {
+                blockingClient.connect();
+            } catch (final Exception e) {
+                System.out.println("Error while connecting!");
+                e.printStackTrace();
+                throw e;
+            }
             System.out.println("Successfully connected!");
-            blockingClient.subscribeWith().topicFilter("example/topic/#").send();
+            try {
+                blockingClient.subscribeWith().topicFilter("example/topic/#").send();
+            } catch (final Exception e) {
+                System.out.println("Error while subscribing!");
+                throw e;
+            }
             System.out.println("Successfully subscribed!");
 
             while (true) {

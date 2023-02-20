@@ -33,6 +33,9 @@ public class ReactivePublisher {
                 .doOnComplete(() -> {
                     System.out.println("Successfully published!");
                     disconnect.subscribe();
+                }).doOnError(throwable -> {
+                    System.out.println("Error while publishing!");
+                    throwable.printStackTrace();
                 });
 
         reactiveClient.connect() //
