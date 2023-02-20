@@ -4,7 +4,9 @@ import com.hivemq.client.mqtt.MqttGlobalPublishFilter;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5RxClient;
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
+import com.hivemq.client.mqtt.mqtt5.message.subscribe.suback.Mqtt5SubAck;
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 import org.jetbrains.annotations.NotNull;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -26,20 +28,22 @@ public class ReactiveSubscriber {
             System.out.println("Received publish with payload: " + new String(publish.getPayloadAsBytes(), UTF_8));
         });
 
-        reactiveClient.connect().subscribe((connAck, connectThrowable) -> {
-            if (connectThrowable != null) {
-                System.out.println("Error while connecting!");
-                connectThrowable.printStackTrace();
-            } else {
-                System.out.println("Successfully connected!");
-                reactiveClient.subscribeWith().topicFilter("example/topic/#").applySubscribe().subscribe((subAck, subscribeThrowable) -> {
-                    if (subscribeThrowable != null) {
-                        System.out.println("Error while subscribing!");
-                        subscribeThrowable.printStackTrace();
-                    }
-                    System.out.println("Successfully subscribed!");
-                });
-            }
-        });
+        final Single<Mqtt5SubAck> subAckSingle =
+                reactiveClient.subscribeWith().topicFilter("example/topic/#").applySubscribe() //
+                        .doOnError(throwable -> {
+                            System.out.println("Error while subscribing!");
+                            throwable.printStackTrace();
+                        }).doOnSuccess(mqtt5SubAck -> {
+                            System.out.println("Successfully subscribed!");
+                        });
+
+        reactiveClient.connect() //
+                .doOnSuccess(connAck -> {
+                    System.out.println("Successfully connected!");
+                    subAckSingle.subscribe();
+                }).doOnError(throwable -> { //
+                    System.out.println("Error while connecting!");
+                    throwable.printStackTrace();
+                }).subscribe();
     }
 }
