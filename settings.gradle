@@ -5,5 +5,5 @@ include 'hivemq-ce-testcontainer'
 include 'hivemq-mqtt-application-test'
 include 'math-challenge-client'
 include 'math-challenge-extension'
-
+include 'mqtt-client-api-flavors'
 
