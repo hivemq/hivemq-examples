@@ -1,12 +1,10 @@
 package org.example;
 
 import com.hivemq.client.mqtt.MqttGlobalPublishFilter;
-import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
 import org.jetbrains.annotations.NotNull;
 
-import static com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient.Mqtt5Publishes;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -15,18 +13,17 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class BlockingSubscriber {
 
     public static void main(final String @NotNull [] args) throws Exception {
-        final Mqtt5BlockingClient blockingClient = Mqtt5Client.builder()
+        final var blockingClient = Mqtt5Client.builder()
                 .identifier("blocking-subscriber")
                 .serverHost("broker.hivemq.com")
                 .serverPort(1883)
                 .buildBlocking();
 
-        try (final Mqtt5Publishes publishes = blockingClient.publishes(MqttGlobalPublishFilter.ALL)) {
+        try (final var publishes = blockingClient.publishes(MqttGlobalPublishFilter.ALL)) {
             try {
                 blockingClient.connect();
             } catch (final Exception e) {
                 System.out.println("Error while connecting!");
-                e.printStackTrace();
                 throw e;
             }
             System.out.println("Successfully connected!");

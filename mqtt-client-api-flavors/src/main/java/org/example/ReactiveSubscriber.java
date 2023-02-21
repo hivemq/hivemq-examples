@@ -2,7 +2,6 @@ package org.example;
 
 import com.hivemq.client.mqtt.MqttGlobalPublishFilter;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
-import com.hivemq.client.mqtt.mqtt5.Mqtt5RxClient;
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
 import com.hivemq.client.mqtt.mqtt5.message.subscribe.suback.Mqtt5SubAck;
 import io.reactivex.Flowable;
@@ -17,7 +16,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class ReactiveSubscriber {
 
     public static void main(final String @NotNull [] args) {
-        final Mqtt5RxClient reactiveClient = Mqtt5Client.builder()
+        final var reactiveClient = Mqtt5Client.builder()
                 .identifier("reactive-subscriber")
                 .serverHost("broker.hivemq.com")
                 .serverPort(1883)
@@ -30,11 +29,11 @@ public class ReactiveSubscriber {
 
         final Single<Mqtt5SubAck> subAckSingle =
                 reactiveClient.subscribeWith().topicFilter("example/topic/#").applySubscribe() //
-                        .doOnError(throwable -> {
+                        .doOnSuccess(mqtt5SubAck -> {
+                            System.out.println("Successfully subscribed!");
+                        }).doOnError(throwable -> {
                             System.out.println("Error while subscribing!");
                             throwable.printStackTrace();
-                        }).doOnSuccess(mqtt5SubAck -> {
-                            System.out.println("Successfully subscribed!");
                         });
 
         reactiveClient.connect() //
