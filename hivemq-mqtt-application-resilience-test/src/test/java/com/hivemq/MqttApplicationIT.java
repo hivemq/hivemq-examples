@@ -30,7 +30,7 @@ public class MqttApplicationIT {
 
     private static final @NotNull DockerImageName TOXIPROXY_IMAGE =
             DockerImageName.parse("ghcr.io/shopify/toxiproxy:latest");
-    private static final @NotNull DockerImageName HIVEMQ_IMAGE = DockerImageName.parse("acidsepp/hivemq-ce:latest").asCompatibleSubstituteFor("hivemq/hivemq-ce");
+    private static final @NotNull DockerImageName HIVEMQ_IMAGE = DockerImageName.parse("hivemq/hivemq-ce:latest");
 
     private final @NotNull Network network = Network.newNetwork();
 
