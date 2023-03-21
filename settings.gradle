@@ -3,6 +3,7 @@ include 'hivemq-getting-started-hivemq-cloud'
 include 'hivemq-getting-started-public-broker'
 include 'hivemq-ce-testcontainer'
 include 'hivemq-mqtt-application-test'
+include 'hivemq-mqtt-application-resilience-test'
 include 'math-challenge-client'
 include 'math-challenge-extension'
 
